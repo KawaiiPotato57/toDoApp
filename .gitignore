@@ -1,0 +1,7 @@
+# dependencies
+/todoapp/node_modules
+/todobe/node_modules
+# misc
+/todobe/.env
+.DS_Store
+.env.local

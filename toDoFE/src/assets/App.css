@@ -1,0 +1,46 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  overflow: hidden;
+  
+  /* background-image: url('https://tinyurl.com/2ep46uz4'); */
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 5%;
+  box-sizing: border-box;
+  
+  &::before {  
+    content: "";
+    background-image: url('https://tinyurl.com/2ep46uz4'); 
+    background-size: cover;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.4;
+  }
+}
+
+h5 {
+  position: relative;
+  color: #ffffff;  
+  font-size: 14rem;
+  line-height: 0.9;
+  text-align: center;
+}
+
+.user {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 80%;
+  background-image: url('https://tinyurl.com/3j386vcr');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+
+
