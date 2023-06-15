@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
       color:"white",
       marginBottom:'5px',
-      padding:'10px',
+      padding:'15px',
+      borderRadius:'10px',
       backgroundColor: alpha('#fff0f5',0.9)
 
     }, 
@@ -30,10 +31,11 @@ const useStyles = makeStyles((theme) => ({
     list: {
       marginTop: theme.spacing(2),
       width: '100%',
-      maxWidth: 360,
+      maxWidth: 380,
       maxHeight: '28rem',
       overflow: "scroll",
       backgroundColor: alpha('#f9e0ff', 0.8),
+      borderRadius:'10px'
     },
   }));
 

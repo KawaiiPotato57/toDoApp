@@ -1,7 +1,6 @@
 const app = require('./app'); // The actual Express application
-const server = require('./server');
+const server = require('./src/services/dbService');
 
-
-app.listen(server.PORT, () => {
+app.listen( process.env.PORT || server.PORT, () => {
 	console.log(`Server running on port ${server.PORT}`);
 });

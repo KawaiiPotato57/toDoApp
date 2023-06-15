@@ -1,6 +1,6 @@
 # dependencies
-/todoapp/node_modules
+/todofe/node_modules
 /todobe/node_modules
 # misc
-
+/todofe/.env
 .DS_Store

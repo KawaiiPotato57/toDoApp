@@ -1,5 +1,7 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/api/todos/";
+import config from "../config";
+
+const baseUrl = config.apiUrl;
 
 async function getTasks() {
   try {
@@ -27,14 +29,12 @@ async function deleteTask(id) {
 }
 
 async function putTask(obj) {
-    try {
-        const response = await axios.put(`${baseUrl}/${obj.id}`, obj);
-        return response.data;
-    } catch (error) {
-        console.error(error);
-    }
-   
+  try {
+    const response = await axios.put(`${baseUrl}/${obj.id}`, obj);
+    return response.data;
+  } catch (error) {
+    console.error(error);
   }
-
+}
 
 export default { getTasks, postTask, deleteTask, putTask };

@@ -1,49 +1,82 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Typography } from "@material-ui/core";
+import CircularProgress from "@mui/material/CircularProgress";
 import useStyles from "../assets/styles";
 import { InputField } from "./InputField";
 import ToDoList from "./ToDoList";
 import TodoService from "../services/todo";
+import Alerts from "./Alerts";
 
 const TodoApp = () => {
   const classes = useStyles();
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [loading, setLoading] = useState(true);
   const selectedTodo = useRef();
+
+  // states for Alerts
+  const [open, setOpen] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const handleAlert = (alertSeverity, alertMessage, open) => {
+    setAlertSeverity(alertSeverity);
+    setAlertMessage(alertMessage);
+    setOpen(open);
+  };
+
+  const handleAlertClose = () => {
+    setOpen(false);
+  };
+
+  const showAlert = Alerts(open, handleAlertClose, alertSeverity, alertMessage);
 
   function deleteTodo() {
     let toDelete = JSON.stringify(todos[selectedTodo.current]);
     let id = JSON.parse(toDelete).id;
     TodoService.deleteTask(id).then((task) => {
-      console.log("Deleted Task");
+      handleAlert("success", "Task Deleted successfully!", true);
     });
   }
 
   function changeTodo(obj) {
-    TodoService.putTask(obj).then((data) => {
-      console.log("after :", data)
-      const updatedTodos = todos.map((todo) => {
-        if (todo.id === obj.id) {
-          return {
-            ...todo,
-            completed: data.completed,
-            completedTime: data.completedTime,
-          };
-        }
-        return todo;
+    TodoService.putTask(obj)
+      .then((data) => {
+        console.log("after :", data);
+        const updatedTodos = todos.map((todo) => {
+          if (todo.id === obj.id) {
+            return {
+              ...todo,
+              completed: data.completed,
+              completedTime: data.completedTime,
+            };
+          }
+          return todo;
+        });
+        setTodos(updatedTodos);
+      })
+      .catch((error) => {
+        console.error(error);
       });
-      setTodos(updatedTodos);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
   }
 
   useEffect(() => {
-    TodoService.getTasks().then((tasks) => {
-      setTodos(tasks);
-    });
+    setLoading(true);
+    const timer = setTimeout(() => {
+      TodoService.getTasks()
+        .then((tasks) => {
+          setTodos(tasks);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }, 2190);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleInputChange = (event) => {
@@ -64,19 +97,22 @@ const TodoApp = () => {
         completedTime: null,
         creationTime: new Date().toLocaleString(),
       };
-    
+
       setInputValue("");
       TodoService.postTask(newTodo).then((task) => {
         setTodos([...todos, task]);
-        console.log("Added Task");
+        handleAlert("success", "Task added successfully!", true);
       });
     }
   };
 
   const handleToggleComplete = (id, completed) => {
     let obj = { id: id, completed: !completed };
+    completed
+      ? handleAlert("success", "Task Marked In-complete!", true)
+      : handleAlert("success", "Task Marked Completed!", true);
     changeTodo(obj);
-    };
+  };
 
   const handleDeleteTodo = () => {
     if (selectedTodo.current !== null) {
@@ -109,16 +145,22 @@ const TodoApp = () => {
         onPress={handleKeyPress}
         onClick={handleAddTodo}
       />
-
-      <ToDoList
-        todos={todos}
-        handleToggleComplete={handleToggleComplete}
-        handleMenuOpen={handleMenuOpen}
-        handleMenuClose={handleMenuClose}
-        anchorEl={anchorEl}
-        selectedTodo={selectedTodo.current}
-        handleDeleteTodo={handleDeleteTodo}
-      />
+      <div>
+        {loading ? (
+          <CircularProgress /> // Display the loader while loading
+        ) : (
+          <ToDoList
+            todos={todos}
+            handleToggleComplete={handleToggleComplete}
+            handleMenuOpen={handleMenuOpen}
+            handleMenuClose={handleMenuClose}
+            anchorEl={anchorEl}
+            selectedTodo={selectedTodo.current}
+            handleDeleteTodo={handleDeleteTodo}
+          />
+        )}
+      </div>
+      {open ? showAlert() : ""}
     </Container>
   );
 };

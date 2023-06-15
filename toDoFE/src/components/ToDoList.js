@@ -11,10 +11,14 @@ import {
   MenuItem,
   Divider,
 } from "@material-ui/core";
+
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 function ToDoList(props) {
   const classes = useStyles();
+  function formatTimestamp(timestamp) {
+    return new Date(timestamp).toLocaleString();
+  }
 
   const tasks = props.todos.map((todo, index) => (
     <React.Fragment key={index}>
@@ -23,12 +27,13 @@ function ToDoList(props) {
           checked={todo.completed || false}
           onChange={() => props.handleToggleComplete(todo.id, todo.completed)}
         />
+
         <ListItemText
           primary={todo.task}
           secondary={
             todo.completed
-              ? `Completed on ${todo.completedTime}`
-              : `Created on ${todo.creationTime}`
+              ? `Completed on ${formatTimestamp(todo.completedTime)}`
+              : `Created on ${formatTimestamp(todo.creationTime)}`
           }
           style={{
             textDecoration: todo.completed ? "line-through" : "none",
