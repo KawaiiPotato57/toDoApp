@@ -8,7 +8,7 @@ async function getTasks() {
     const response = await axios.get(baseUrl);
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
   }
 }
 

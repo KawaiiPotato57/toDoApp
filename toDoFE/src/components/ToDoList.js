@@ -20,7 +20,7 @@ function ToDoList(props) {
     return new Date(timestamp).toLocaleString();
   }
 
-  const tasks = props.todos.map((todo, index) => (
+  const tasks = props.todos?.map((todo, index) => (
     <React.Fragment key={index}>
       <ListItem key={index}>
         <Checkbox
@@ -64,7 +64,11 @@ function ToDoList(props) {
   ));
   return (
     <div>
-      <List className={classes.list}>{tasks}</List>
+      {tasks ? (
+        <List className={classes.list}>{tasks}</List>
+      ) : (
+        <h2>Error Getting List</h2>
+      )}
     </div>
   );
 }

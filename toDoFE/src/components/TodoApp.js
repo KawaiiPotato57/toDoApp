@@ -5,7 +5,7 @@ import useStyles from "../assets/styles";
 import { InputField } from "./InputField";
 import ToDoList from "./ToDoList";
 import TodoService from "../services/todo";
-import Alerts from "./Alerts";
+import Alerts from "../error-handlers/Alerts";
 
 const TodoApp = () => {
   const classes = useStyles();
@@ -69,7 +69,7 @@ const TodoApp = () => {
           setTodos(tasks);
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error.message);
         })
         .finally(() => {
           setLoading(false);
